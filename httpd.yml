@@ -1,0 +1,14 @@
+---
+- name: This playbook is to create a user
+  hosts: all
+  become: true
+  tasks:
+    - name: stop service httpd
+      service: 
+        name: httpd
+        state: stopped
+
+    - name: Uninstall httpd pkg
+      yum:
+        name: httpd
+        state: removed 

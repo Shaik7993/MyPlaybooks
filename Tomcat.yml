@@ -1,0 +1,41 @@
+---
+- name: My playbook
+  hosts: all
+  become: true
+
+  vars:
+    version: 11
+
+  tasks:
+    - name: Install java pkg on RedHat
+      yum:
+        name: java
+        state: installed
+      when: ansible_os_family == "RedHat"
+
+    - name: Install java on Debian
+      apt:
+        name: default-java
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Download Tomcat version {{version}}
+      get_url:
+        url: https://downloads.apache.org/tomcat/tomcat-{{version}}/v{{version}}.0.2/bin/apache-tomcat-{{version}}.0.2.tar.gz
+        dest: /opt/
+
+    - name: Extract Tomcat
+      unarchive:
+        src: /opt/apache-tomcat-{{version}}.0.2.tar.gz
+        dest: /opt/
+        remote_src: yes
+
+    - name: Exectuable Permission
+      file:
+        path: /opt/apache-tomcat-{{version}}.0.2/bin/startup.sh
+        mode: 0777
+
+    - name: Run .sh file
+      shell: nohup ./startup.sh
+      args:
+        chdir: /opt/apache-tomcat-{{version}}.0.2/bin

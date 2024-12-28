@@ -1,0 +1,9 @@
+---
+- name: My Playbook
+  hosts: all
+  become: true
+  tasks:
+    - name: COPYing a file
+      copy:
+        src: /home/ansibleadmin/index.html
+        dest: /var/www/html  

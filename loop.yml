@@ -1,0 +1,11 @@
+---
+- name: My palybook
+  hosts: all
+  become: true
+  tasks:
+    - name: Adding a list of users
+      user: name='{{ item }}' state=present
+      with_items:
+        - Raj
+        - Sai
+        - Hari

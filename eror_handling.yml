@@ -1,0 +1,37 @@
+---
+- name: My palybook
+  hosts: all
+  become: true
+  tasks:
+    - name: Install httpd pkg
+      yum:
+        name: httpd
+        state: installed
+      when: ansible_os_family == "RedHat"
+
+
+    - name: start httpd service
+      service:
+        name: http--
+        state: started
+      when: ansible_os_family == "RedHat"
+      ignore_errors: yes
+
+    - name: Install apache2  pkg
+      apt:
+        name: apache2
+        state: installed
+      when: ansible_os_family == "Debian"
+
+
+    - name: start apache2  service
+      service:
+        name: apache2
+        state: started
+      when: ansible_os_family == "Debian"
+
+    - name: copy index.html
+      copy:
+        src: /home/ansibleadmin/index.html
+        dest: /var/www/html
+        mode: 0666
